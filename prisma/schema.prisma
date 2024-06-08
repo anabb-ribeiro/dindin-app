@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String
+  password String
+  Register Register?
+}
+
+enum ExpenseCategory {
+  GROCERIES
+  PERSONAL_CARE
+  SHOPPING
+  HOME
+  ENTERTAINMENT
+  TRANSPORTATION
+  UTILITIES
+  HEALTHCARE
+  EDUCATION
+  OTHER
+}
+
+model Register {
+  id          Int             @id @default(autoincrement())
+  date        DateTime
+  description String
+  value       Int
+  is_income   Boolean         @default(true)
+  user        User            @relation(fields: [userId], references: [id])
+  userId      Int             @unique
+  category    ExpenseCategory @default(OTHER)
+}
