@@ -1,33 +1,42 @@
-import prisma from "@/prisma/client";
+import { prisma } from "../../../prisma/client"
 import { NextRequest, NextResponse } from "next/server";
-import { registerSchema } from "../schema";
-import bcrypt from "bcrypt";
+import { registerBodySchema, categorySchema } from "../zodSchema";
+
+interface registerBody {
+  userId: string;
+  category: string;
+  value: number;
+  description?: string;
+  date?: string;
+}
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const validation = registerSchema.safeParse(body);
+  const body: registerBody = await request.json();
+  const bodyValidation = registerBodySchema.safeParse(body)
+  const categoryValidation = categorySchema.safeParse(body.category);
 
-  if (!validation.success) {
-    return NextResponse.json(validation.error, { status: 400 })
+  if (!bodyValidation.success) {
+    return NextResponse.json(bodyValidation.error, { status: 400 })
   }
-
-  const user = await prisma.user.findUnique({
-    where: { email: body.email }
-  })
-
-  if (user) {
-    return NextResponse.json({ error: 'User already exists' }, { status: 400 })
+  if (!categoryValidation.success) {
+    return NextResponse.json(bodyValidation.error, { status: 400 })
   }
+  try {
+    const newRegister = await prisma.register.create({
+      data: {
+        userId: body.userId,
+        category: categoryValidation.data,
+        value: body.value,
+        date: body.date ? body.date : new Date(),
+        description: body.description
+      }
+    })
+    return NextResponse.json(newRegister, { status: 201 })
+  } catch (error) {
+    return NextResponse.json("Internal Error", { status: 500 })
+  }
+}
 
-  const hashPassword = await bcrypt.hash(body.password, 10);
+export async function GET(request: NextRequest) {
 
-  const newUser = await prisma.user.create({
-    data: {
-      name: body.name,
-      email: body.email,
-      password: hashPassword
-    }
-  })
-
-  return NextResponse.json(newUser, { status: 200 })
 }
