@@ -28,3 +28,19 @@ content-type: application/json
     "value": 1000,
     "description": "ABUBLEBLE"
 }
+
+################## patch transactions \/
+
+PATCH http://localhost:3000/api/transaction/cm04naubq0002zazg466pgfuf HTTP/1.1
+content-type: application/json
+
+{
+    "category": "OTHER",
+    "value": 50,
+    "description": "ABUBLEBLE"
+}
+
+################## DELETE transactions \/
+
+DELETE http://localhost:3000/api/transaction/cm04naubq0002zazg466pgfuf HTTP/1.1
+content-type: application/json
