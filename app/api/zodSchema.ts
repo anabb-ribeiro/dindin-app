@@ -22,6 +22,14 @@ export const transactionBodySchema = z.object({
   date: z.string().datetime().optional(),
 });
 
+export const transactionUpdateBodySchema = z.object({
+  id: z.string(),
+  category: z.string().optional(),
+  value: z.number().optional(),
+  description: z.string().max(150).optional(),
+  date: z.string().datetime().optional(),
+});
+
 enum ExpenseCategory {
   GROCERIES = "GROCERIES",
   PERSONAL_CARE = "PERSONAL_CARE",
