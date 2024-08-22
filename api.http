@@ -1,0 +1,30 @@
+############################### GET CSRF \/
+
+GET http://localhost:3000/api/auth/csrf HTTP/1.1
+content-type: application/json
+
+
+###################### LOGIN \/
+POST http://localhost:3000/api/auth/callback/credentials HTTP/1.1
+content-type: application/json
+
+{
+    "csrfToken": "5a717f82312cbf64cfc2d9dd523d3589c0d0d132ae10e36aa5f83801b2a0acd8",
+    "email": "abbmr@hotmail.com",
+    "password": "Abobrinha@12"
+}
+
+########################## GET Transactions \/
+GET http://localhost:3000/api/transaction HTTP/1.1
+content-type: application/json
+
+
+#################### POST Transactions \/
+POST http://localhost:3000/api/transaction HTTP/1.1
+content-type: application/json
+
+{
+    "category": "OTHER",
+    "value": 1000,
+    "description": "ABUBLEBLE"
+}
