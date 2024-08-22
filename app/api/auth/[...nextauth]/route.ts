@@ -48,7 +48,23 @@ export const authConfig: NextAuthConfig = {
   ],
   session: {
     strategy: "jwt"
-  }
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (typeof token.id === 'string') {
+        session.user.id = token.id;
+      } else {
+        session.user.id = '';
+      }
+      return session
+    },
+  },
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authConfig)
