@@ -15,7 +15,7 @@ export const loginSchema = z.object({
   password: z.string()
 });
 
-export const registerBodySchema = z.object({
+export const transactionBodySchema = z.object({
   userId: z.string(),
   category: z.string(),
   value: z.number(),

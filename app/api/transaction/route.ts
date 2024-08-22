@@ -1,8 +1,8 @@
 import { prisma } from "../../../prisma/client"
 import { NextRequest, NextResponse } from "next/server";
-import { registerBodySchema, categorySchema } from "../zodSchema";
+import { transactionBodySchema, categorySchema } from "../zodSchema";
 
-interface registerBody {
+interface transactionBody {
   userId: string;
   category: string;
   value: number;
@@ -11,8 +11,8 @@ interface registerBody {
 }
 
 export async function POST(request: NextRequest) {
-  const body: registerBody = await request.json();
-  const bodyValidation = registerBodySchema.safeParse(body)
+  const body: transactionBody = await request.json();
+  const bodyValidation = transactionBodySchema.safeParse(body)
   const categoryValidation = categorySchema.safeParse(body.category);
 
   if (!bodyValidation.success) {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(bodyValidation.error, { status: 400 })
   }
   try {
-    const newRegister = await prisma.register.create({
+    const newTransaction = await prisma.transaction.create({
       data: {
         userId: body.userId,
         category: categoryValidation.data,
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         description: body.description
       }
     })
-    return NextResponse.json(newRegister, { status: 201 })
+    return NextResponse.json(newTransaction, { status: 201 })
   } catch (error) {
     return NextResponse.json("Internal Error", { status: 500 })
   }
