@@ -1,7 +1,7 @@
 import { prisma } from "../../../prisma/client"
 import { NextRequest, NextResponse } from "next/server";
-import { transactionBodySchema, categorySchema, transactionUpdateBodySchema } from "../zodSchema";
-import { auth } from "../auth/[...nextauth]/route"
+import { transactionBodySchema, categorySchema } from "../zodSchema";
+import { auth } from "@/auth"
 
 interface transactionBody {
   userId: string;
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
   const categoryValidation = categorySchema.safeParse(body.category);
 
   if (!session) {
-    return NextResponse.json("Internal Error sem session.user", { status: 500 })
+    return NextResponse.json({ message: "Not authenticated" }, { status: 401 })
   }
 
   if (!bodyValidation.success) {
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     })
     return NextResponse.json(newTransaction, { status: 201 })
   } catch (error) {
-    return NextResponse.json("Internal Error", { status: 500 })
+    return NextResponse.json({ message: "Internal Error" }, { status: 500 })
   }
 }
 
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const session = await verifySession()
 
   if (!session) {
-    return NextResponse.json("Internal Error sem session.user", { status: 500 })
+    return NextResponse.json({ message: "Not authenticated" }, { status: 401 })
   }
 
   try {
@@ -68,7 +68,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     })
     return NextResponse.json(transactions, { status: 200 })
   } catch (error) {
-    return NextResponse.json("Internal Error erro no prisma", { status: 500 })
+    return NextResponse.json({ message: "Internal Error" }, { status: 500 })
   }
 
 }

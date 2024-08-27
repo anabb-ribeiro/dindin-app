@@ -19,11 +19,11 @@ export async function PATCH(req: NextRequest, { params: { id } }: Params) {
   const session = await verifySession()
 
   if (!session) {
-    return NextResponse.json("Internal Error sem session.user", { status: 500 })
+    return NextResponse.json({ message: "Not authenticated" }, { status: 401 })
   }
 
   if (!id || typeof id !== "string") {
-    return NextResponse.json("Bad Request", { status: 400 })
+    return NextResponse.json({ message: "Bad Request" }, { status: 400 })
   }
 
   const body: transactionUpdateBody = await req.json();
@@ -56,22 +56,22 @@ export async function PATCH(req: NextRequest, { params: { id } }: Params) {
     })
     return NextResponse.json(newTransaction, { status: 201 })
   } catch (error) {
-    return NextResponse.json("Internal Error", { status: 500 })
+    return NextResponse.json({ message: "Internal Error" }, { status: 500 })
   }
 }
 
 export async function DELETE(req: NextRequest, { params: { id } }: Params) {
   console.log(id)
   if (!id || typeof id !== "string") {
-    return NextResponse.json("Bad Request", { status: 400 })
+    return NextResponse.json({ message: "Bad Request" }, { status: 400 })
   }
 
   try {
     await prisma.transaction.delete({
       where: { id }
     })
-    return NextResponse.json("Deleted", { status: 200 })
+    return NextResponse.json({ message: "Deleted" }, { status: 200 })
   } catch (error) {
-    return NextResponse.json("Internal Error", { status: 500 })
+    return NextResponse.json({ message: "Internal Error" }, { status: 500 })
   }
 }
