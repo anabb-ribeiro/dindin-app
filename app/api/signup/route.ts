@@ -1,7 +1,7 @@
 import { prisma } from "../../../prisma/client"
 import { NextRequest, NextResponse } from "next/server";
 import { signupSchema } from "../zodSchema";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
