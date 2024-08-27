@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -18,16 +19,20 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(linear-gradient(to right, #05EDE3, #645FFB));
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.input-style {
+  @apply w-full h-[2.3rem] rounded-[5px] border border-[#555555] p-2;
+  outline: none;
+}
+
+.primary-button {
+  @apply bg-[#6460FB] rounded-[5px] w-52 h-10 text-white;
 }
